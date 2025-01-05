@@ -4,19 +4,19 @@
 #define TRIG_PIN 3  // Pin connected to the Trig pin of the sensor
 #define ECHO_PIN 4 // Pin connected to the Echo pin of the sensor
 
-#define DISTANCE_OPEN 10 //cm
+#define DISTANCE_OPEN 30 //cm
 #define OPEN_ANGLE 180 //degree
 #define CLOSE_ANGLE 0 //degree
-#define DELAY_OPEN_TIME 3000//ms
+#define DELAY_OPEN_TIME 500//ms
 
 Servo myservo;  // create Servo object to control a servo
 int currentAngle = 0; // Variable to track the current angle
 
 int moveServoWithDelay(int currentAngle, int targetAngle);
 long readUltrasonicDistance(int trigPin, int echoPin);
-
-
-
+void playfulLidMovement(int cycles, int openAngle, int closeAngle, int speedDelay);
+void playfulLidMovement2();
+void playfulLidMovement3();
 void setup() {
   Serial.begin(9600);
   myservo.attach(2);  // attaches the servo on pin 9 to the Servo object
@@ -24,7 +24,7 @@ void setup() {
   pinMode(ECHO_PIN, INPUT);
 
   currentAngle = moveServoWithDelay(currentAngle, CLOSE_ANGLE);
-  delay(1000);
+  playfulLidMovement2();
 }
 
 // int targetAngle = 0;
@@ -44,17 +44,17 @@ void setup() {
 void loop() {
   long dis = readUltrasonicDistance(TRIG_PIN, ECHO_PIN);
   Serial.println(dis);
-
-  if(dis < DISTANCE_OPEN){
-    currentAngle = moveServoWithDelay(currentAngle, OPEN_ANGLE);
-    Serial.println("Wait for sometime to close lid");
-    delay(DELAY_OPEN_TIME); // this sensor is not good to read continuously
-    currentAngle = moveServoWithDelay(currentAngle, CLOSE_ANGLE);
-    Serial.println("Closed lid");
-  }else{
-    delay(200); // this sensor is not good to read continuously
+  if(dis > 0){
+    if(dis < DISTANCE_OPEN){
+      currentAngle = moveServoWithDelay(currentAngle, OPEN_ANGLE);
+      Serial.println("Wait for sometime to close lid");
+      delay(DELAY_OPEN_TIME); // this sensor is not good to read continuously
+      currentAngle = moveServoWithDelay(currentAngle, CLOSE_ANGLE);
+      Serial.println("Closed lid");
+      playfulLidMovement3();
+    }
   }
-  
+  delay(300); // this sensor is not good to read continuously
 }
 
 // Function to set servo angle with calculated delay for SG90
@@ -104,4 +104,29 @@ long readUltrasonicDistance(int trigPin, int echoPin) {
     return -1; // Timeout occurred (no object detected within range)
   }
   return distance;
+}
+
+
+// Function to make the lid open and close repeatedly like a playful dog
+void playfulLidMovement(int cycles, int openAngle, int closeAngle, int speedDelay) {
+  for (int i = 0; i < cycles; i++) {
+    currentAngle = moveServoWithDelay(currentAngle, openAngle); // Open the lid
+    delay(speedDelay); // Quick pause while open
+    currentAngle = moveServoWithDelay(currentAngle, closeAngle); // Close the lid
+    delay(speedDelay); // Quick pause while closed
+
+    // Debugging: Print current cycle info
+    Serial.print("Playful movement cycle ");
+    Serial.println(i + 1);
+  }
+}
+
+void playfulLidMovement2(){
+  playfulLidMovement(2, OPEN_ANGLE/2, CLOSE_ANGLE, 0);
+  playfulLidMovement(1, OPEN_ANGLE/1, CLOSE_ANGLE, 0);
+  playfulLidMovement(2, OPEN_ANGLE/2, CLOSE_ANGLE, 0);
+}
+
+void playfulLidMovement3(){
+  playfulLidMovement(3, OPEN_ANGLE/2, CLOSE_ANGLE, 0);
 }
