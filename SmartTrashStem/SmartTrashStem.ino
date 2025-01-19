@@ -4,7 +4,7 @@
 #define TRIG_PIN 3  // Pin connected to the Trig pin of the sensor
 #define ECHO_PIN 4 // Pin connected to the Echo pin of the sensor
 
-#define DISTANCE_OPEN 30 //cm
+#define DISTANCE_OPEN 10 //cm
 #define OPEN_ANGLE 180 //degree
 #define CLOSE_ANGLE 0 //degree
 #define DELAY_OPEN_TIME 500//ms
