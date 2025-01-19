@@ -51,7 +51,7 @@ void loop() {
       delay(DELAY_OPEN_TIME); // this sensor is not good to read continuously
       currentAngle = moveServoWithDelay(currentAngle, CLOSE_ANGLE);
       Serial.println("Closed lid");
-      playfulLidMovement3();
+      // playfulLidMovement3();
     }
   }
   delay(300); // this sensor is not good to read continuously
