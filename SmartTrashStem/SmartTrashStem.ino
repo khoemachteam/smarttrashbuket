@@ -7,7 +7,7 @@
 #define DISTANCE_OPEN 20 //cm
 #define OPEN_ANGLE 180 //degree
 #define CLOSE_ANGLE 0 //degree
-#define DELAY_OPEN_TIME 500//ms
+#define DELAY_OPEN_TIME 800//ms
 
 Servo myservo;  // create Servo object to control a servo
 int currentAngle = 0; // Variable to track the current angle
@@ -17,14 +17,18 @@ long readUltrasonicDistance(int trigPin, int echoPin);
 void playfulLidMovement(int cycles, int openAngle, int closeAngle, int speedDelay);
 void playfulLidMovement2();
 void playfulLidMovement3();
+void playfulLidMovement4();
 void setup() {
   Serial.begin(9600);
   myservo.attach(2);  // attaches the servo on pin 9 to the Servo object
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
 
+  currentAngle = moveServoWithDelay(currentAngle, OPEN_ANGLE);
+  delay(3000);
   currentAngle = moveServoWithDelay(currentAngle, CLOSE_ANGLE);
-  playfulLidMovement2();
+  delay(200);
+
 }
 
 // int targetAngle = 0;
@@ -43,18 +47,19 @@ void setup() {
 
 void loop() {
   long dis = readUltrasonicDistance(TRIG_PIN, ECHO_PIN);
-  Serial.println(dis);
-  if(dis > 0){
-    if(dis < DISTANCE_OPEN){
-      currentAngle = moveServoWithDelay(currentAngle, OPEN_ANGLE);
-      Serial.println("Wait for sometime to close lid");
-      delay(DELAY_OPEN_TIME); // this sensor is not good to read continuously
-      currentAngle = moveServoWithDelay(currentAngle, CLOSE_ANGLE);
-      Serial.println("Closed lid");
-      // playfulLidMovement3();
-    }
+  
+  while(dis < DISTANCE_OPEN && dis > 0){
+    currentAngle = moveServoWithDelay(currentAngle, OPEN_ANGLE);
+    Serial.println("Wait for sometime to close lid");
+    delay(DELAY_OPEN_TIME); // this sensor is not good to read continuously
+    
+    delay(200); // this sensor is not good to read continuously
+    dis = readUltrasonicDistance(TRIG_PIN, ECHO_PIN);
+    Serial.println(dis);
   }
-  delay(300); // this sensor is not good to read continuously
+    currentAngle = moveServoWithDelay(currentAngle, CLOSE_ANGLE);
+    Serial.println("Closed lid");
+    // playfulLidMovement3();
 }
 
 // Function to set servo angle with calculated delay for SG90
@@ -132,5 +137,5 @@ void playfulLidMovement3(){
 }
 
 void playfulLidMovement4(){
-  playfulLidMovement(3, OPEN_ANGLE/1, CLOSE_ANGLE, 0);
+  playfulLidMovement(2, OPEN_ANGLE/1, CLOSE_ANGLE, 0);
 }
