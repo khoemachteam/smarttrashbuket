@@ -130,3 +130,7 @@ void playfulLidMovement2(){
 void playfulLidMovement3(){
   playfulLidMovement(3, OPEN_ANGLE/2, CLOSE_ANGLE, 0);
 }
+
+void playfulLidMovement4(){
+  playfulLidMovement(3, OPEN_ANGLE/1, CLOSE_ANGLE, 0);
+}
