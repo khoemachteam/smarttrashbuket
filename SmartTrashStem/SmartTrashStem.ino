@@ -48,18 +48,21 @@ void setup() {
 void loop() {
   long dis = readUltrasonicDistance(TRIG_PIN, ECHO_PIN);
   
-  while(dis < DISTANCE_OPEN && dis > 0){
-    currentAngle = moveServoWithDelay(currentAngle, OPEN_ANGLE);
-    Serial.println("Wait for sometime to close lid");
-    delay(DELAY_OPEN_TIME); // this sensor is not good to read continuously
-    
-    delay(200); // this sensor is not good to read continuously
-    dis = readUltrasonicDistance(TRIG_PIN, ECHO_PIN);
-    Serial.println(dis);
-  }
+  if(dis < DISTANCE_OPEN && dis > 0){
+    while(dis < DISTANCE_OPEN && dis > 0){
+      currentAngle = moveServoWithDelay(currentAngle, OPEN_ANGLE);
+      Serial.println("Wait for sometime to close lid");
+      delay(DELAY_OPEN_TIME); // this sensor is not good to read continuously
+      
+      delay(200); // this sensor is not good to read continuously
+      dis = readUltrasonicDistance(TRIG_PIN, ECHO_PIN);
+      Serial.println(dis);
+    }
     currentAngle = moveServoWithDelay(currentAngle, CLOSE_ANGLE);
     Serial.println("Closed lid");
-    // playfulLidMovement3();
+    //playfulLidMovement3();
+  }
+  delay(10);
 }
 
 // Function to set servo angle with calculated delay for SG90
