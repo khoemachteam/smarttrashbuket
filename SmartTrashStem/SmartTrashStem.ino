@@ -4,10 +4,11 @@
 #define TRIG_PIN 3  // Pin connected to the Trig pin of the sensor
 #define ECHO_PIN 4 // Pin connected to the Echo pin of the sensor
 
-#define DISTANCE_OPEN 20 //cm
+#define DISTANCE_OPEN 25 //cm
 #define OPEN_ANGLE 180 //degree
 #define CLOSE_ANGLE 0 //degree
-#define DELAY_OPEN_TIME 800//ms
+#define DELAY_OPEN_TIME 1000//ms
+#define DELAY_READ_SENSOR 500 //ms
 
 Servo myservo;  // create Servo object to control a servo
 int currentAngle = 0; // Variable to track the current angle
@@ -25,9 +26,9 @@ void setup() {
   pinMode(ECHO_PIN, INPUT);
 
   currentAngle = moveServoWithDelay(currentAngle, OPEN_ANGLE);
-  delay(3000);
+  delay(2000);
   currentAngle = moveServoWithDelay(currentAngle, CLOSE_ANGLE);
-  delay(200);
+  delay(DELAY_READ_SENSOR);
 
 }
 
@@ -45,6 +46,8 @@ void setup() {
 //   currentAngle = moveServoWithDelay(currentAngle, targetAngle);
 // }
 
+
+
 void loop() {
   long dis = readUltrasonicDistance(TRIG_PIN, ECHO_PIN);
   
@@ -54,7 +57,7 @@ void loop() {
       Serial.println("Wait for sometime to close lid");
       delay(DELAY_OPEN_TIME); // this sensor is not good to read continuously
       
-      delay(200); // this sensor is not good to read continuously
+      delay(DELAY_READ_SENSOR); // this sensor is not good to read continuously
       dis = readUltrasonicDistance(TRIG_PIN, ECHO_PIN);
       Serial.println(dis);
     }
@@ -62,7 +65,8 @@ void loop() {
     Serial.println("Closed lid");
     //playfulLidMovement3();
   }
-  delay(10);
+  // Serial.println(dis);
+  delay(DELAY_READ_SENSOR);
 }
 
 // Function to set servo angle with calculated delay for SG90
@@ -71,7 +75,7 @@ int moveServoWithDelay(int currentAngle, int targetAngle) {
   int angleChange = abs(targetAngle - currentAngle);
 
   // Calculate delay time for SG90 servo (in milliseconds)
-  int delayTime = angleChange * 3; // 0.12 sec for 60 degrees = 2 ms per degree
+  int delayTime = angleChange * 2; // 0.12 sec for 60 degrees = 2 ms per degree
 
   // Move the servo to the target angle
   myservo.write(targetAngle);
