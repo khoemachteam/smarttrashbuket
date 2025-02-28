@@ -4,7 +4,7 @@
 #define TRIG_PIN 3  // Pin connected to the Trig pin of the sensor
 #define ECHO_PIN 4 // Pin connected to the Echo pin of the sensor
 
-#define DISTANCE_OPEN 25 //cm
+#define DISTANCE_OPEN 35 //cm
 #define OPEN_ANGLE 180 //degree
 #define CLOSE_ANGLE 0 //degree
 #define DELAY_OPEN_TIME 1000//ms
@@ -75,7 +75,7 @@ int moveServoWithDelay(int currentAngle, int targetAngle) {
   int angleChange = abs(targetAngle - currentAngle);
 
   // Calculate delay time for SG90 servo (in milliseconds)
-  int delayTime = angleChange * 2; // 0.12 sec for 60 degrees = 2 ms per degree
+  int delayTime = angleChange * 1; // 0.12 sec for 60 degrees = 2 ms per degree
 
   // Move the servo to the target angle
   myservo.write(targetAngle);
