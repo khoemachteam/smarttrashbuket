@@ -1,10 +1,10 @@
 #include <Servo.h>
 
-#define SERVO_PIN 2
-#define TRIG_PIN 3  // Pin connected to the Trig pin of the sensor
+#define SERVO_PIN 3
+#define TRIG_PIN 2  // Pin connected to the Trig pin of the sensor
 #define ECHO_PIN 4 // Pin connected to the Echo pin of the sensor
 
-#define DISTANCE_OPEN 35 //cm
+#define DISTANCE_OPEN 25 //cm
 #define OPEN_ANGLE 180 //degree
 #define CLOSE_ANGLE 0 //degree
 #define DELAY_OPEN_TIME 1000//ms
@@ -21,7 +21,7 @@ void playfulLidMovement3();
 void playfulLidMovement4();
 void setup() {
   Serial.begin(9600);
-  myservo.attach(2);  // attaches the servo on pin 9 to the Servo object
+  myservo.attach(SERVO_PIN);  // attaches the servo on pin 9 to the Servo object
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
 
@@ -49,9 +49,10 @@ void setup() {
 
 
 void loop() {
+  Serial.print("Read sensor: ");
   long dis = readUltrasonicDistance(TRIG_PIN, ECHO_PIN);
   
-  if(dis < DISTANCE_OPEN && dis > 0){
+  if(dis < DISTANCE_OPEN && dis >= 0){
     while(dis < DISTANCE_OPEN && dis > 0){
       currentAngle = moveServoWithDelay(currentAngle, OPEN_ANGLE);
       Serial.println("Wait for sometime to close lid");
@@ -65,7 +66,7 @@ void loop() {
     Serial.println("Closed lid");
     //playfulLidMovement3();
   }
-  // Serial.println(dis);
+  Serial.println(dis);
   delay(DELAY_READ_SENSOR);
 }
 
