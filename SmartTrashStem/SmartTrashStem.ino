@@ -1,7 +1,7 @@
 #include <Servo.h>
 
-#define SERVO_PIN 2
-#define TRIG_PIN 3  // Pin connected to the Trig pin of the sensor
+#define SERVO_PIN 3
+#define TRIG_PIN 2  // Pin connected to the Trig pin of the sensor
 #define ECHO_PIN 4 // Pin connected to the Echo pin of the sensor
 
 #define DISTANCE_OPEN 25 //cm
@@ -21,7 +21,7 @@ void playfulLidMovement3();
 void playfulLidMovement4();
 void setup() {
   Serial.begin(9600);
-  myservo.attach(2);  // attaches the servo on pin 9 to the Servo object
+  myservo.attach(SERVO_PIN);  // attaches the servo on pin 9 to the Servo object
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
 
